@@ -144,11 +144,13 @@ The platform includes visualization tools for:
 ### Environment Setup
 
 1. Copy the example environment file:
+
 ```bash
 cp .env.example .env
 ```
 
 2. Update the `.env` file with your actual API keys and credentials:
+
 ```bash
 # News API Configuration
 NEWSAPI_KEY=your_actual_newsapi_key
