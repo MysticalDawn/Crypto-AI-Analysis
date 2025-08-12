@@ -48,7 +48,7 @@ cd Crypto-AI-Analysis
 2. Install required dependencies:
 
 ```bash
-pip install transformers torch pandas numpy scikit-learn seaborn matplotlib yfinance praw newsapi-python pytrends tqdm
+pip install transformers torch pandas numpy scikit-learn seaborn matplotlib yfinance praw newsapi-python pytrends tqdm python-dotenv
 ```
 
 ## 📊 Data Sources
@@ -143,10 +143,26 @@ The platform includes visualization tools for:
 
 ### Environment Setup
 
-Update the API keys in the respective scraper files:
+1. Copy the example environment file:
+```bash
+cp .env.example .env
+```
 
-- `data_scrapers/news_scraper.py`
-- `data_scrapers/reddit_scraper.py`
+2. Update the `.env` file with your actual API keys and credentials:
+```bash
+# News API Configuration
+NEWSAPI_KEY=your_actual_newsapi_key
+GNEWS_API_KEY=your_actual_gnews_api_key
+CRYPTOPANIC_AUTH_TOKEN=your_actual_cryptopanic_token
+
+# Reddit API Configuration
+REDDIT_CLIENT_ID=your_actual_reddit_client_id
+REDDIT_CLIENT_SECRET=your_actual_reddit_client_secret
+REDDIT_USERNAME=your_actual_reddit_username
+REDDIT_PASSWORD=your_actual_reddit_password
+```
+
+**⚠️ Important**: Never commit your `.env` file to version control. It's already included in `.gitignore`.
 
 ## 📝 Data Output
 
@@ -179,6 +195,6 @@ This tool is for educational and research purposes. Cryptocurrency investments c
 - **Data Processing**: pandas, numpy
 - **Visualization**: matplotlib, seaborn
 - **Data Sources**: yfinance, praw, newsapi-python, pytrends
-- **Utilities**: tqdm, pickle
+- **Utilities**: tqdm, pickle, python-dotenv
 
 ---
