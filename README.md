@@ -1,202 +1,114 @@
-# Crypto-AI-Analysis
+# Crypto AI Analysis
 
-A comprehensive cryptocurrency analysis platform that combines sentiment analysis, market data scraping, and machine learning models to provide insights into cryptocurrency markets.
+A comprehensive cryptocurrency analysis platform that combines data collection, sentiment analysis, and AI-powered insights.
 
-> **⚠️ Work in Progress** - This project is still under active development with lots and lots of work remaining. Many features are experimental and the codebase is continuously evolving.
-
-## 🚀 Features
-
-- **Multi-Source Data Collection**: Scrapes data from Reddit, news APIs, and Google Trends
-- **Sentiment Analysis**: Uses fine-tuned CryptoBERT models for cryptocurrency-specific sentiment classification
-- **Market Data Integration**: Fetches historical price data using Yahoo Finance API
-- **Data Fusion**: Combines sentiment and market data for comprehensive analysis
-- **Machine Learning Models**: Includes time series forecasting and classification models
-- **Visualization Tools**: Interactive charts and market trend analysis
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 Crypto-AI-Analysis/
-├── data/                          # Data storage directory
-│   ├── combined_data.pkl         # Merged sentiment and market data
-│   ├── data.csv                  # Processed dataset
-│   ├── news_results.pkl          # Scraped news data
-│   └── reddit_results.pkl        # Scraped Reddit data
-├── data_scrapers/                # Data collection modules
-│   ├── news_scraper.py          # News API integration (NewsAPI, GNews, CryptoPanic)
-│   └── reddit_scraper.py        # Reddit data collection from crypto subreddits
-├── models/                       # Trained ML models
-├── ai_models.ipynb              # Jupyter notebook with ML model training
-├── combine_data.py              # Data fusion and preprocessing
-├── crypto_sentiment_analysis.py # Sentiment analysis using CryptoBERT
-├── fetch_coin.py                # Cryptocurrency price data fetching
-├── merge_data.py                # Data merging utilities
-├── prepare_dataframe.py         # DataFrame preparation utilities
-├── trend_search.py              # Google Trends integration
-└── visualize_market.py          # Market data visualization
+├── src/
+│   ├── data_collection/          # Data collection modules
+│   │   ├── scrapers/             # Web scrapers for various sources
+│   │   │   ├── crypto_panic.py   # CryptoPanic news scraper
+│   │   │   ├── google_news.py    # Google News scraper
+│   │   │   ├── news_api.py       # NewsAPI scraper
+│   │   │   ├── news_data_io.py   # NewsData.io scraper
+│   │   │   ├── reddit.py         # Reddit sentiment scraper
+│   │   │   └── coin_gecko.py     # CoinGecko data fetcher
+│   │   └── fetchers/             # Data fetching utilities
+│   │       ├── news_fetcher.py   # News aggregation fetcher
+│   │       └── coin_fetcher.py   # Cryptocurrency data fetcher
+│   ├── data_processing/          # Data processing and analysis
+│   │   ├── data_merger.py        # Data merging utilities
+│   │   ├── data_combiner.py      # Data combination utilities
+│   │   ├── dataframe_preparer.py # DataFrame preparation
+│   │   └── sentiment_analyzer.py # Sentiment analysis tools
+│   ├── analysis/                 # Analysis and visualization
+│   │   ├── trend_analyzer.py     # Trend analysis tools
+│   │   └── market_visualizer.py  # Market visualization tools
+│   └── notebooks/                # Jupyter notebooks
+│       └── ai_models.ipynb       # AI model development
+├── data/                         # Data storage
+│   ├── raw/                      # Raw collected data
+│   ├── processed/                # Processed and cleaned data
+│   └── external/                 # External data sources
+├── config/                       # Configuration files
+│   └── .env                      # Environment variables
+├── requirements.txt              # Python dependencies
+└── README.md                     # Project documentation
 ```
 
-## 🛠️ Installation
+## Features
 
-1. Clone the repository:
+- **Multi-source Data Collection**: Collects data from CryptoPanic, Google News, NewsAPI, Reddit, and CoinGecko
+- **Sentiment Analysis**: Analyzes sentiment from news articles and social media
+- **Data Processing**: Comprehensive data cleaning, merging, and preparation
+- **Market Analysis**: Trend analysis and market visualization tools
+- **AI Integration**: Jupyter notebooks for AI model development
 
-```bash
-git clone <repository-url>
-cd Crypto-AI-Analysis
-```
+## Setup
 
-2. Install required dependencies:
+1. Clone the repository
+2. Install dependencies: `pip install -r requirements.txt`
+3. Copy `.env.example` to `.env` and configure your API keys
+4. Run the desired modules
 
-```bash
-pip install transformers torch pandas numpy scikit-learn seaborn matplotlib yfinance praw newsapi-python pytrends tqdm python-dotenv
-```
+## Usage
 
-## 📊 Data Sources
-
-### News APIs
-
-- **NewsAPI**: BBC News, The Verge, WSJ, NYT, CNBC, Reuters, Bloomberg
-- **GNews**: Global news coverage
-- **CryptoPanic**: Cryptocurrency-specific news and sentiment
-
-### Reddit Communities
-
-- r/CryptoCurrency
-- r/Bitcoin
-- r/CryptoMarkets
-- r/Crypto
-- r/CryptoTrading
-- r/CryptoAnalysis
-- r/CryptoNews
-
-### Market Data
-
-- **Yahoo Finance**: Historical price data (OHLCV)
-- **Google Trends**: Search interest over time
-
-## 🔍 Sentiment Analysis
-
-The platform uses a fine-tuned CryptoBERT model (`ElKulako/cryptobert`) specifically trained for cryptocurrency sentiment classification. The model categorizes text into three sentiment classes and provides confidence scores.
-
-## 🤖 Machine Learning Models
-
-- **Time Series Forecasting**: Volume prediction using LSTM networks
-- **Classification Models**: Decision trees for sentiment classification
-- **Regression Models**: Random forest for market prediction
-- **Cross-validation**: Robust model evaluation
-
-## 📈 Usage Examples
-
-### Fetching Cryptocurrency Data
+### Data Collection
 
 ```python
-from fetch_coin import get_more_history
+from src.data_collection.scrapers.crypto_panic import fetch_cryptoPanic
+from src.data_collection.scrapers.reddit import fetch_reddit_sentiment
 
-# Get 1 year of Bitcoin data
-btc_data = get_more_history('BTC-USD', days=365)
+# Collect news data
+news_data = fetch_cryptoPanic()
+
+# Collect Reddit sentiment
+reddit_data = fetch_reddit_sentiment()
 ```
 
-### Running Sentiment Analysis
+### Data Processing
 
 ```python
-from crypto_sentiment_analysis import classify
+from src.data_processing.sentiment_analyzer import analyze_sentiment
+from src.data_processing.data_merger import merge_datasets
 
-# Analyze sentiment of crypto-related text
-sentiment_results = classify(data)
+# Analyze sentiment
+sentiment_results = analyze_sentiment(text_data)
+
+# Merge datasets
+combined_data = merge_datasets([dataset1, dataset2])
 ```
 
-### Scraping Reddit Data
+### Analysis
 
 ```python
-from data_scrapers.reddit_scraper import fetch_reddit
+from src.analysis.trend_analyzer import analyze_trends
+from src.analysis.market_visualizer import visualize_market
 
-# Fetch 500 posts from crypto subreddits
-reddit_data = fetch_reddit(limit=500)
+# Analyze trends
+trends = analyze_trends(data)
+
+# Visualize market data
+visualize_market(data)
 ```
 
-### Combining Data Sources
+## Configuration
 
-```python
-from combine_data import merge_data
+Set up your API keys in the `config/.env` file:
 
-# Merge sentiment and market data
-combined_data = merge_data(crypto_data, coin_data)
+```
+CRYPTOPANIC_AUTH_TOKEN=your_token_here
+NEWS_API_KEY=your_key_here
+REDDIT_CLIENT_ID=your_client_id
+REDDIT_CLIENT_SECRET=your_client_secret
 ```
 
-## 📊 Visualization
+## Contributing
 
-The platform includes visualization tools for:
-
-- Volume vs. sentiment analysis
-- Market trend visualization
-- Time series plots
-- Sentiment distribution charts
-
-## 🔧 Configuration
-
-### API Keys Required
-
-- **NewsAPI**: Get your key from [newsapi.org](https://newsapi.org/)
-- **Reddit**: Create a Reddit app at [reddit.com/prefs/apps](https://reddit.com/prefs/apps)
-- **GNews**: Get your key from [gnews.io](https://gnews.io/)
-- **CryptoPanic**: Get your token from [cryptopanic.com](https://cryptopanic.com/)
-
-### Environment Setup
-
-1. Copy the example environment file:
-
-```bash
-cp .env.example .env
-```
-
-2. Update the `.env` file with your actual API keys and credentials:
-
-```bash
-# News API Configuration
-NEWSAPI_KEY=your_actual_newsapi_key
-GNEWS_API_KEY=your_actual_gnews_api_key
-CRYPTOPANIC_AUTH_TOKEN=your_actual_cryptopanic_token
-
-# Reddit API Configuration
-REDDIT_CLIENT_ID=your_actual_reddit_client_id
-REDDIT_CLIENT_SECRET=your_actual_reddit_client_secret
-REDDIT_USERNAME=your_actual_reddit_username
-REDDIT_PASSWORD=your_actual_reddit_password
-```
-
-**⚠️ Important**: Never commit your `.env` file to version control. It's already included in `.gitignore`.
-
-## 📝 Data Output
-
-The platform generates:
-
-- **Combined Dataset**: Merged sentiment and market data in CSV format
-- **Pickle Files**: Serialized data for efficient processing
-- **Visualizations**: Interactive charts and plots
-- **Model Predictions**: ML model outputs and forecasts
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## ⚠️ Disclaimer
-
-This tool is for educational and research purposes. Cryptocurrency investments carry significant risk. Always do your own research and consult with financial advisors before making investment decisions.
-
-## 🔗 Dependencies
-
-- **Core ML**: PyTorch, scikit-learn, transformers
-- **Data Processing**: pandas, numpy
-- **Visualization**: matplotlib, seaborn
-- **Data Sources**: yfinance, praw, newsapi-python, pytrends
-- **Utilities**: tqdm, pickle, python-dotenv
-
----
+1. Follow the established project structure
+2. Add new scrapers to `src/data_collection/scrapers/`
+3. Add new analysis tools to `src/analysis/`
+4. Update requirements.txt for new dependencies
+5. Document new features in README.md

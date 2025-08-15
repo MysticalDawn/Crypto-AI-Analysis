@@ -1,11 +1,11 @@
-from utils.merge_data import merge_data
-from utils.crypto_sentiment_analysis import classify
-from scrapers.fetch_coin import get_more_history
-from scrapers.reddit_scraper import fetch_reddit
+from src.data_processing.data_combiner import merge_data
+from src.data_processing.sentiment_analyzer import classify
+from src.data_collection.scrapers.coin_gecko import get_more_history
+from src.data_collection.scrapers.reddit import fetch_reddit
 import os
 import pickle
-from utils.visualize_market import visualize_avg_sentiment_with_volume
-from utils.prepare_dataframe import make_dataframe
+from src.analysis.market_visualizer import visualize_avg_sentiment_with_volume
+from src.data_processing.dataframe_preparer import make_dataframe
 
 
 def main(visualize=False, reiterate=False):
