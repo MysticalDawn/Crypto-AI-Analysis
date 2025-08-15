@@ -1,6 +1,6 @@
-from data_scrapers.reddit_scraper import fetch_reddit
-from crypto_sentiment_analysis import classify
-from fetch_coin import fetch_coin, get_more_history
+from scrapers.reddit_scraper import fetch_reddit
+from .crypto_sentiment_analysis import classify
+from scrapers.fetch_coin import fetch_coin, get_more_history
 from tqdm import tqdm
 from datetime import datetime
 import pandas as pd
