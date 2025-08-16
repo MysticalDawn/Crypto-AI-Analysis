@@ -1,16 +1,16 @@
-from src.data_processing.data_combiner import merge_data
-from src.data_processing.sentiment_analyzer import classify
-from src.data_collection.scrapers.coin_gecko import get_more_history
-from src.data_collection.scrapers.reddit import fetch_reddit
 import os
 import pickle
+from src.data_processing.data_combiner import merge_data
+from src.data_processing.sentiment_analyzer import classify
+from src.data_collection.fetchers.coin_fetcher import get_more_history
+from src.data_collection.fetchers.reddit import fetch_reddit
 from src.analysis.market_visualizer import visualize_avg_sentiment_with_volume
 from src.data_processing.dataframe_preparer import make_dataframe
 
 
 def main(visualize=False, reiterate=False):
-    if os.path.exists("./data/combined_data.pkl") and not reiterate:
-        with open("./data/combined_data.pkl", "rb") as f:
+    if os.path.exists("./data/processed/combined_data.pkl") and not reiterate:
+        with open("./data/processed/combined_data.pkl", "rb") as f:
             combined_data = pickle.load(f)
     else:
         reddit_data = fetch_reddit(limit=5000, save_file=True, load_file=not reiterate)

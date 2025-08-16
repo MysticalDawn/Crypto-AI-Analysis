@@ -1,10 +1,5 @@
-from scrapers.reddit_scraper import fetch_reddit
-from .crypto_sentiment_analysis import classify
-from scrapers.fetch_coin import fetch_coin, get_more_history
 from tqdm import tqdm
-from datetime import datetime
 import pandas as pd
-import csv
 import pickle
 
 
@@ -91,7 +86,7 @@ def merge_data(crypto_data, coin_data, save_file=True):
     print("After averaging:", finetuned_result)
 
     if save_file:
-        with open("./data/combined_data.pkl", "wb") as f:
+        with open("./data/processed/combined_data.pkl", "wb") as f:
             pickle.dump(finetuned_result, f)
 
     return finetuned_result
