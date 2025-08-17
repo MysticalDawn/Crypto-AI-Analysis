@@ -3,6 +3,8 @@ from transformers import (
     AutoModelForSequenceClassification,
     TextClassificationPipeline as TCP,
 )
+import os
+import pickle
 
 
 def classify_finbert(pipe: TCP, text: str, result) -> str:
@@ -13,7 +15,11 @@ def classify_finbert(pipe: TCP, text: str, result) -> str:
     return result
 
 
-def classify(data):
+def classify_cryptobert(data, save_file=False, load_file=False):
+    if load_file and os.path.exists("./data/processed/sentiment_results.pkl"):
+        with open("./data/processed/sentiment_results.pkl", "rb") as f:
+            data = pickle.load(f)
+            return data
     model_name = "ElKulako/cryptobert"
     tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
     model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=3)
@@ -35,4 +41,8 @@ def classify(data):
 
     data["sentiment_type"] = filtered_sentiments
     data["sentiment_score"] = filtered_scores
+    if save_file:
+        with open("./data/processed/sentiment_results.pkl", "wb") as f:
+            pickle.dump(data, f)
+            print("✅ Sentiment results saved successfully")
     return data

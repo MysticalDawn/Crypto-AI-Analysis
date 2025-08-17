@@ -5,6 +5,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import pickle
 import time
 
 
@@ -44,9 +45,9 @@ def load_more(length_of_elements, driver):
     return True if len(elements) > length_of_elements else False
 
 
-if __name__ == "__main__":
+def main():
     driver = setup()
-    data_limit = 50
+    data_limit = 50000
     print(f"\n📊 Starting data collection (target: {data_limit} articles)...")
     elements = driver.find_elements(
         by=By.CSS_SELECTOR, value="div.news-row.news-row-link"
@@ -61,7 +62,7 @@ if __name__ == "__main__":
 
     print(f"\n🎯 Data collection complete! Found {len(elements)} articles")
     print("=" * 60)
-
+    results = []
     for i, element in enumerate(elements, 1):
         print(f"\n📰 Article {i}/{len(elements)}:")
         title = element.find_element(
@@ -78,7 +79,10 @@ if __name__ == "__main__":
             ).text
         print(f"  📝 Title: {title}")
         print("  " + "-" * 50)
-
+        results.append(title)
     print(f"\n✅ Successfully processed {len(elements)} articles")
     driver.quit()
     print("🔒 WebDriver closed successfully")
+    with open("./data/raw/cryptopanic_results.pkl", "wb") as f:
+        pickle.dump(results, f)
+    print("✅ Cryptopanic data saved successfully")

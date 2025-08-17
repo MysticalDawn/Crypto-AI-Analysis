@@ -4,6 +4,7 @@ import datetime
 import pickle
 import os
 from dotenv import load_dotenv
+from tqdm import tqdm
 
 # Load environment variables
 load_dotenv()
@@ -72,20 +73,37 @@ def reddit_scrapper(
         subreddit_10,
     ]
 
+    print(f"🔍 Scraping {len(subreddits)} subreddits for crypto discussions...")
+    print(f"📊 Target posts per subreddit: {limit}")
+
     # Process each subreddit
-    for subreddit_name in subreddits:
-        for submission in reddit.subreddit(subreddit_name).hot(limit=limit):
+    for subreddit_name in tqdm(
+        subreddits, desc="Processing subreddits", unit="subreddit"
+    ):
+        print(f"  📝 Scraping r/{subreddit_name}...")
+        for submission in tqdm(
+            reddit.subreddit(subreddit_name).hot(limit=limit),
+            desc=f" r/{subreddit_name} ",
+            unit=" post",
+            leave=False,
+        ):
             process_submission(submission, results)
 
-    print(len(results["date"]))
+    print(f"✅ Successfully scraped {len(results['date'])} posts from Reddit")
     return results
 
 
 def fetch_reddit(limit=500, save_file=True, load_file=False):
-    if load_file and os.path.exists("./data/reddit_results.pkl"):
-        with open("./data/reddit_results.pkl", "rb") as f:
+    print("🚀 Starting Reddit data collection...")
+
+    if load_file and os.path.exists("./data/raw/reddit_results.pkl"):
+        print("📂 Loading existing Reddit data from cache...")
+        with open("./data/raw/reddit_results.pkl", "rb") as f:
             results = pickle.load(f)
+            print(f"✅ Loaded {len(results['date'])} cached posts")
             return results
+
+    print("🔑 Authenticating with Reddit API...")
     # Get Reddit credentials from environment variables
     client_id = os.getenv("REDDIT_CLIENT_ID")
     client_secret = os.getenv("REDDIT_CLIENT_SECRET")
@@ -99,6 +117,7 @@ def fetch_reddit(limit=500, save_file=True, load_file=False):
             "Missing Reddit credentials. Please set REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USERNAME, and REDDIT_PASSWORD environment variables."
         )
 
+    print("🔐 Credentials validated, connecting to Reddit...")
     reddit = praw.Reddit(
         client_id=client_id,
         client_secret=client_secret,
@@ -106,8 +125,14 @@ def fetch_reddit(limit=500, save_file=True, load_file=False):
         username=username,
         password=password,
     )
+
+    print("✅ Successfully connected to Reddit API")
     results = reddit_scrapper(reddit, limit=limit)
+
     if save_file:
-        with open("./data/reddit_results.pkl", "wb") as f:
+        print("💾 Saving Reddit data to cache...")
+        with open("./data/raw/reddit_results.pkl", "wb") as f:
             pickle.dump(results, f)
+        print("✅ Reddit data saved successfully")
+
     return results
