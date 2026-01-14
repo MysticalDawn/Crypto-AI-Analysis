@@ -86,3 +86,6 @@ def main():
     with open("./data/raw/cryptopanic_results.pkl", "wb") as f:
         pickle.dump(results, f)
     print("✅ Cryptopanic data saved successfully")
+
+
+main()

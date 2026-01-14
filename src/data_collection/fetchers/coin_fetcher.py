@@ -76,3 +76,6 @@ def get_more_history(symbol: str, days: int = 365):
     except Exception as e:
         print(f"❌ Error fetching data for {symbol}: {str(e)}")
         raise
+
+
+print(fetch_coin("NOVT").history(period="max", interval="1d"))
